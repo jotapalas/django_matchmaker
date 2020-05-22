@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: matchmaker_postgres
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "10001:5432"
+  django:
+    container_name: matchmaker_django
+    build: .
+    environment:
+      MATCHMAKER_ENV: ${MATCHMAKER_ENV}
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "10000:8000"
+    depends_on:
+      - postgres

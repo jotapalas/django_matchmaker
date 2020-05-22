@@ -10,6 +10,8 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "10001:5432"
+    volumes:
+      - vol_postgres_db:/var/lib/postgresql/data
   django:
     container_name: matchmaker_django
     build: .
@@ -22,3 +24,7 @@ services:
       - "10000:8000"
     depends_on:
       - postgres
+
+volumes:
+  vol_postgres_db:
+    driver: local

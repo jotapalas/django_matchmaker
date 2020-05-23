@@ -19,4 +19,4 @@ class PlayerProfile(models.Model):
         if self.nickname is None:
             self.nickname = self.user.username
 
-        super(PlayerProfile, self).save()
+        super(PlayerProfile, self).save(*args, **kwargs)

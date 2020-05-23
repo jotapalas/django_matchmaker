@@ -20,7 +20,7 @@ class Match(BaseCompetition):
             self.name = (tournament.short_name if tournament else self.game.short_name)
             self.name += self.start_date.strftime('%Y%m%d%H%m')
 
-        super(Match, self).save()
+        super(Match, self).save(*args, **kwargs)
 
 
 class MatchContender(BaseContender):

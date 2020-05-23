@@ -9,3 +9,7 @@ class Game(models.Model):
 
     def __str__(self):
         return f'{self.short_name} - {self.name}'
+
+    def save(self, *args, **kwargs):
+        self.short_name = self.short_name.upper()
+        super(Game, self).save(*args, **kwargs)

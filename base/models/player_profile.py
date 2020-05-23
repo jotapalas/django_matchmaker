@@ -6,7 +6,7 @@ from django.utils.timezone import now
 
 
 class PlayerProfile(models.Model):
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, db_index=True)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, db_index=True, primary_key=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     nickname = models.CharField(max_length=100, blank=False, unique=True)
     register_date = models.DateTimeField(default=now)

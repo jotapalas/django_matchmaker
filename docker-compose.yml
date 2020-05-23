@@ -3,11 +3,11 @@ version: '3'
 services:
   postgres:
     container_name: matchmaker_postgres
-    image: postgres
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: matchmaker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    build: docker_builds/postgres
     ports:
       - "10001:5432"
     volumes:
@@ -17,6 +17,7 @@ services:
     build: .
     environment:
       MATCHMAKER_ENV: ${MATCHMAKER_ENV}
+      POSTGRES_DB: matchmaker
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code

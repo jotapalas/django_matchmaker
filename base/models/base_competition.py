@@ -21,3 +21,6 @@ class BaseCompetition(models.Model):
 
 class BaseContender(models.Model):
     player = models.ForeignKey(PlayerProfile, on_delete=models.PROTECT)
+
+    class Meta:
+        abstract = True

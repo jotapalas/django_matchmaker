@@ -2,13 +2,12 @@ from django.db import models
 
 from base.models import (
     BaseCompetition, BaseContender,
-    Tournament, Game, PlayerProfile
+    Tournament, PlayerProfile
 )
 
 
 class Match(BaseCompetition):
     tournament = models.ForeignKey(Tournament, blank=True, null=True, on_delete=models.SET_NULL)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
     contenders = models.ManyToManyField(PlayerProfile, related_name='matches', through='MatchContender')
 
     class Meta:

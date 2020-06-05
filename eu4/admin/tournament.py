@@ -24,6 +24,7 @@ class EU4TournamentAdmin(admin.ModelAdmin):
         'short_name',
         'start_date',
         'end_date',
+        'schedule',
         'created_by',
     )
     inlines = (

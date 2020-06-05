@@ -1,33 +1,88 @@
-version: '3'
+version: '3.7'
 
 services:
-  postgres:
-    container_name: matchmaker_postgres
-    restart: "always"
-    environment:
-      POSTGRES_DB: matchmaker
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    build: docker_builds/postgres
+  backend:
+    container_name: ${PROJECT_NAME}_backend
+    hostname: backend
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    command: sh post_deploy.sh
+    environment: &django_environment
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      LOGGING_ROOT_DIR: /logs
+      DEPLOY_MACHINE_IP: ${DEPLOY_MACHINE_IP}
+      NGINX_EXTERNAL_PORT: ${NGINX_EXTERNAL_PORT}
+      APP_VERSION: ${APP_VERSION}
+      POSTGRES_DB:  ${POSTGRES_DB}
+      SUPERUSER_NAME: ${SUPERUSER_NAME}
+      SUPERUSER_PASSWORD: ${SUPERUSER_PASSWORD}
+      SUPERUSER_MAIL: ${SUPERUSER_MAIL}
     ports:
-      - "10001:5432"
+      - "3141"
     volumes:
-      - vol_postgres_db:/var/lib/postgresql/data
-  django:
-    container_name: matchmaker_django
-
-    environment:
-      MATCHMAKER_ENV: ${MATCHMAKER_ENV}
-      POSTGRES_DB: matchmaker
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
-    ports:
-      - "10000:8000"
+      - vol_static:/backend/static
+      - vol_media:/media
+      - vol_logs:/logs
+      - ./backend/src/.:/backend
+      - ./docker/backend/post_deploy.sh:/backend/post_deploy.sh
+    links:
+      - postgres
     depends_on:
       - postgres
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+        max-file: "2"
+  nginx:
+    container_name: ${PROJECT_NAME}_nginx
+    restart: always
+    build:
+      context: ./docker/nginx/
+    ports:
+      - "${NGINX_EXTERNAL_PORT}:80"
+      - "${NGINX_EXTERNAL_SSL_PORT}:443"
+    volumes:
+      - vol_static:/backend/static:cached
+      - vol_media:/media:cached
+      - vol_logs:/var/log/nginx/:cached
+    depends_on:
+      - backend
+    links:
+      - backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+        max-file: "2"
+  postgres:
+    image: postgres:latest
+    container_name: ${PROJECT_NAME}_postgres
+    restart: 'always'
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB:  ${POSTGRES_DB}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+        max-file: "2"
+    ports:
+      - "${EXTERNAL_PORT}:5432"
+    volumes:
+      - vol_postgres_db:/var/lib/postgresql/data
+      - vol_logs:/logs
 volumes:
+  vol_static:
+    driver: local
+  vol_media:
+    driver: local
+  vol_logs:
+    driver: local
   vol_postgres_db:
+    driver: local
+  vol_node_modules:
+  vol_front_dist:
     driver: local

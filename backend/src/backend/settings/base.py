@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 
     'apps.base',
     'apps.eu4',
@@ -81,6 +82,13 @@ DATABASES = {
         'HOST': 'matchmaker_postgres',
         'PORT': '',
     }
+}
+
+# rest_framework permissions
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
 }
 
 

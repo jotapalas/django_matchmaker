@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from apps.eu4.models import EU4Match
-from ..serializers import EU4MatchSerializer
+from ..serializers import EU4MatchSerializer, EU4MatchSerializerDetail
 
 
 class EU4MatchList(generics.ListCreateAPIView):
@@ -15,4 +15,4 @@ class EU4MatchList(generics.ListCreateAPIView):
 class EU4MatchDetail(generics.RetrieveUpdateAPIView):
     permission_classes = []  # TODO
     queryset = EU4Match.objects.all()
-    serializer_class = EU4MatchSerializer
+    serializer_class = EU4MatchSerializerDetail

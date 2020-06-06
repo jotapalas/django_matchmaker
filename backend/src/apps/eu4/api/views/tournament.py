@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from apps.eu4.models import EU4Tournament
-from ..serializers import EU4TournamentSerializer
+from ..serializers import EU4TournamentSerializer, EU4TournamentSerializerDetail
 
 
 class EU4TournamentList(generics.ListCreateAPIView):
@@ -15,4 +15,4 @@ class EU4TournamentList(generics.ListCreateAPIView):
 class EU4TournamentDetail(generics.RetrieveUpdateAPIView):
     permission_classes = []  # TODO
     queryset = EU4Tournament.objects.all()
-    serializer_class = EU4TournamentSerializer
+    serializer_class = EU4TournamentSerializerDetail

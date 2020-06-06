@@ -26,7 +26,7 @@ class EU4Tournament(BaseCompetition):
 
 
 class EU4TournamentContender(BaseContender):
-    tournament = models.ForeignKey(EU4Tournament, on_delete=models.PROTECT)
+    tournament = models.ForeignKey(EU4Tournament, on_delete=models.PROTECT, related_name='contenders_detail')
     preferred_tier = models.IntegerField(choices=EU4Country.Tier.choices[1:], verbose_name='Preferred tier')
     preferred_countries = ArrayField(base_field=models.CharField(max_length=4, blank=True), default=list, blank=True)
     country = models.ForeignKey(EU4Country, on_delete=models.PROTECT, blank=True, null=True, related_name='tournaments')

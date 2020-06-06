@@ -21,7 +21,7 @@ class EU4Match(BaseCompetition):
 
 
 class EU4MatchContender(BaseContender):
-    match = models.ForeignKey(EU4Match, on_delete=models.CASCADE)
+    match = models.ForeignKey(EU4Match, on_delete=models.CASCADE, related_name='contenders_detail')
     country = models.ForeignKey(EU4Country, on_delete=models.PROTECT, related_name='matches')
     subbing = models.ForeignKey(PlayerProfile, on_delete=models.SET_NULL, blank=True, null=True, related_name='subs')
 

@@ -50,8 +50,10 @@ services:
       - vol_logs:/var/log/nginx/:cached
     depends_on:
       - backend
+      - frontend
     links:
       - backend
+      - frontend
     logging:
       driver: "json-file"
       options:
@@ -74,6 +76,58 @@ services:
     volumes:
       - vol_postgres_db:/var/lib/postgresql/data
       - vol_logs:/logs
+  frontend_debug:
+    container_name: ${PROJECT_NAME}_frontend_debug
+    hostname: frontend_debug
+    restart: always
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+      args:
+        USER_ID: ${USER_ID}
+        GROUP_ID: ${GROUP_ID}
+    ports:
+      - ${DEBUG_FRONTEND_PORT}:8080
+    environment:
+      VUE_APP_API_PORT: ${NGINX_EXTERNAL_PORT}
+      VUE_APP_ENDPOINT: ${DEPLOY_MACHINE_IP}  # Local: if you work on a remote machine put that machine IP here.
+    volumes:
+      - ./frontend:/frontend/
+      - vol_node_modules:/frontend/node_modules
+      - vol_front_dist:/frontend/dist
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+        max-file: "2"
+    command: npm run serve
+
+  # This container will only compile the frontend, then it dies
+  frontend:
+    container_name: ${PROJECT_NAME}_frontend
+    hostname: frontend
+    restart: 'no'
+    build:
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+      args:
+        USER_ID: ${USER_ID}
+        GROUP_ID: ${GROUP_ID}
+    ports:
+      - 8080
+    environment:
+      VUE_APP_API_PORT: ${NGINX_EXTERNAL_PORT}
+      VUE_APP_ENDPOINT: ${DEPLOY_MACHINE_IP}  # Local: if you work on a remote machine put that machine IP here.
+    volumes:
+      - ./frontend:/frontend/
+      - vol_node_modules:/frontend/node_modules
+      - vol_front_dist:/frontend/dist
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+        max-file: "2"
+    command: npm run build
 volumes:
   vol_static:
     driver: local

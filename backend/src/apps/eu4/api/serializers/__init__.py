@@ -1,1 +1,2 @@
 from .country import EU4CountrySerializer
+from .tournament import EU4TournamentSerializer

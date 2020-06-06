@@ -5,25 +5,14 @@ from ..serializers import TournamentSerializer
 
 
 class TournamentList(generics.ListCreateAPIView):
-    """
-    get:
-    Return a list of all Tournaments
-
-    post:
-    Create a new tournament
-    """
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(created_by=self.request.user)
+
 
 class TournamentDetail(generics.RetrieveUpdateAPIView):
-    """
-    get:
-    Return a single Tournament
-
-    put:
-    Update an existing Tournament
-    """
-    permission_classes = []  # TODO only admins should be able to post, put or delete
+    permission_classes = []  # TODO
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer

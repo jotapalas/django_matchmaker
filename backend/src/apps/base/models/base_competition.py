@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 
 from apps.base.models import Game, PlayerProfile
+from django.contrib.auth.models import User
 
 
 class BaseCompetition(models.Model):
@@ -13,7 +14,7 @@ class BaseCompetition(models.Model):
     name = models.CharField(max_length=100, blank=True)
     start_date = models.DateTimeField(blank=False)
     end_date = models.DateTimeField(blank=True, null=True)
-    created_by = models.ForeignKey(PlayerProfile, on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
 
     class Meta:
         abstract = True

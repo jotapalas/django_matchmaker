@@ -1,6 +1,12 @@
 # Django matchmaker
 
-DESCRIPTION OF THE PROJECT @jotapalas
+This is a project that aims to help organize multiplayer games between friends.
+
+The project borns to give cover to the hispanic Europa Universalis IV community, so the main part of the development is focused on this game. But if you think it could be a base to develop your own platform for another game, we encourage you to fork this, and keep extending the functionality. Although there is some restrictions:
+
+- Every new game structure must be based on the `base` app. We think it's sufficiently abstract to cover nearly every multiplayer need, but of course we are open to suggestions.
+
+- You must follow the app structure, and provide a REST API using `djangorestframework`. This way, if you don't know how to contribute to the frontend, you can suggest new games by designing a new backend and someone else will contribute with a 
 
 ## Local environment
 

@@ -20,6 +20,10 @@ class EU4Tournament(BaseCompetition):
         super(EU4Tournament, self).__init__(*args, **kwargs)
         self.game = GameFactory(short_name='EU4')
 
+    def __str__(self):
+        short_name = f' ({self.short_name})' if self.short_name else ''
+        return f'{self.name}{short_name}'
+
 
 class EU4TournamentContender(BaseContender):
     tournament = models.ForeignKey(EU4Tournament, on_delete=models.PROTECT)

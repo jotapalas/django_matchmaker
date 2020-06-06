@@ -1,16 +1,15 @@
 from rest_framework import serializers
-from apps.base.models import Match, Game
+from apps.eu4.models import EU4Match, EU4Tournament
 
 
-class MatchSerializer(serializers.ModelSerializer):
-    game = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Game.objects.all())
+class EU4MatchSerializer(serializers.ModelSerializer):
     created_by = serializers.PrimaryKeyRelatedField(read_only=True)
+    tournament = serializers.PrimaryKeyRelatedField(read_only=False, queryset=EU4Tournament.objects.all())
 
     class Meta:
-        model = Match
+        model = EU4Match
         fields = [
             'uuid',
-            'game',
             'created_by',
             'name',
             'start_date',
